@@ -1,5 +1,15 @@
 class KindsController < ApplicationController
+ 
+  #include ActionController::HttpAuthentication::Basic::ControllerMethods
+  #http_basic_authenticate_with name:"Pedro", password:"secret"
+
+  include ActionController::HttpAuthentication::Digest::ControllerMethods
+  USERS = {"pedro" => Digest::MD5.hexdigest(["jack","Application","secret"].join(":"))}
+
+
   before_action :set_kind, only: [:show, :update, :destroy]
+  before_action :authenticate
+
 
   # GET /kinds
   def index
@@ -52,5 +62,11 @@ class KindsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def kind_params
       params.require(:kind).permit(:description)
+    end
+
+    def authenticate
+      authenticate_or_request_with_http_digest("Application") do |username|
+        USERS[username]
+      end
     end
 end
