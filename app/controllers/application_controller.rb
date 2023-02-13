@@ -1,20 +1,12 @@
 class ApplicationController < ActionController::API
-        include DeviseTokenAuth::Concerns::SetUserByToken
-    
-  def set_headers
-    response.headers['Content-Type'] = 'application/vnd.api+json'
-  end
+
+  include DeviseTokenAuth::Concerns::SetUserByToken
+
+  before_filter :ensure_json_request
+
   def ensure_json_request
-    if request.get? || request.delete?
-      return if request.headers['Accept'] =~ /vnd\.api\+json/
-      render nothing: true, status: 406
-    else
-      if (request.headers['Content-Type'] =~ /vnd\.api\+json/) &&
-         (request.headers['Accept'] =~ /vnd\.api\+json/)
-        return
-      end
-   
-      render nothing: true, status: 415
-    end
+    return if request.headers["Accept"] =~ /vnd\.api\+json/
+    render :nothing => true, :status => 406
   end
+
 end
