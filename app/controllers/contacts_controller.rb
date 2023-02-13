@@ -1,10 +1,9 @@
-module V2
 class ContactsController < ApplicationController
   before_action :set_contact, only: [:show, :update, :destroy]
 
   # GET /contacts
   def index
-    @contacts = Contact.all
+    @contacts = Contact.last(5)
     render json: @contacts #, methods: :birthdate_br #[:hello, :i18n]
   end
 
@@ -53,5 +52,4 @@ class ContactsController < ApplicationController
       # )
       ActiveModelSerializers::Deserialization.jsonapi_parse(params)
     end
-  end
 end
