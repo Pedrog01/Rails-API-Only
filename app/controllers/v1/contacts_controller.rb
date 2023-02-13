@@ -1,13 +1,10 @@
+module V1
 class ContactsController < ApplicationController
   before_action :set_contact, only: [:show, :update, :destroy]
 
   # GET /contacts
   def index
-    if params[:version] == '1'
     @contacts = Contact.all
-    elsif params[:version] == '2'
-      @contacts = Contact.last(5)
-    end
     render json: @contacts #, methods: :birthdate_br #[:hello, :i18n]
   end
 
@@ -56,4 +53,5 @@ class ContactsController < ApplicationController
       # )
       ActiveModelSerializers::Deserialization.jsonapi_parse(params)
     end
+  end
 end
