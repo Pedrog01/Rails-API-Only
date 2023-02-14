@@ -1,5 +1,4 @@
 module V1
-
   class AddressesController < ApplicationController
     before_action :set_contact
 
