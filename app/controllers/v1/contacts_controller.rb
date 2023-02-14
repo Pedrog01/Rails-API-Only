@@ -8,12 +8,14 @@ module V1
     def index
       page_number = params[:page].try(:[], :number)
       per_page= params[:page].try(:[], :size )
+
       @contacts = Contact.all.page(5).per(per_page)
 
-      expires_in 30.seconds, public: true
-      render json: @contacts # , methods: :birthdate_br # [:hello, :i18n]
+     # expires_in 30.seconds, public: true
+     if stale?(:etag: @contacts) 
+     render json: @contacts # , methods: :birthdate_br # [:hello, :i18n]
     end
-
+  end
     # GET /contacts/1
     def show
       render json: @contact, include: [:kind, :address, :phones] #, meta: { author: "Gabriel Sappio" } #, include: [:kind, :phones, :address]
