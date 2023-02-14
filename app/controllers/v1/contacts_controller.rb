@@ -1,4 +1,5 @@
 module V1
+  include ErrorSerializer
 
   class ContactsController < ApplicationController
     before_action :set_contact, only: [:show, :update, :destroy]
@@ -33,7 +34,7 @@ module V1
       if @contact.update(contact_params)
         render json: @contact, include: [:kind, :phones, :address]
       else
-        render json: @contact.errors, status: :unprocessable_entity
+        render json: ErrorSerializer.serializer(@contact.errors)  #@contact.errors, status: :unprocessable_entity
       end
     end
 
