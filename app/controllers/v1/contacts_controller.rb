@@ -12,7 +12,7 @@ module V1
       @contacts = Contact.all.page(5).per(per_page)
 
      # expires_in 30.seconds, public: true
-     if stale?(:etag: @contacts) 
+     if stale?(last_modified: @contacts[0].updated_at) 
      render json: @contacts # , methods: :birthdate_br # [:hello, :i18n]
     end
   end
